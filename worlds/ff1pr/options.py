@@ -22,7 +22,7 @@ class FF1pixelOptions(PerGameCommonOptions):
     # generation options
     chest_priority: VanillaChestPriority
 
-groups = [
+grouped_options = [
     OptionGroup("Base Options", [
         VanillaChestPriority,
     ])]

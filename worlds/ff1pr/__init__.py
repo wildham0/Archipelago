@@ -6,7 +6,7 @@ from .items import item_name_to_id, item_table
 from .locations import location_table, standard_location_name_to_id, event_table
 from .rules import set_location_rules, set_region_rules
 from .regions import ff1pr_regions
-from .options import FF1pixelOptions
+from .options import FF1pixelOptions, grouped_options, presets
 from worlds.AutoWorld import WebWorld, World
 from Options import OptionError, PerGameCommonOptions
 from settings import Group, Bool, FilePath
@@ -32,8 +32,8 @@ class FF1pixelWeb(WebWorld):
     ]
     theme = "grassFlowers"
     game = GAME_NAME
-    option_groups = options.groups
-    options_presets = options.presets
+    option_groups = grouped_options
+    options_presets = presets
 
 class FF1pixelItem(Item):
     game: str = GAME_NAME
