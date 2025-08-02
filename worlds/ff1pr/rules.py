@@ -99,7 +99,7 @@ def set_region_rules(world: "FF1pixelWorld") -> None:
     world.get_entrance("Overworld -> Lufenia Region").access_rule = \
         lambda state: state.has(airship, player)
     world.get_entrance("Overworld -> Beyond the Black Orb").access_rule = \
-        lambda state: state.has(black_orb_destroyed, player)
+        lambda state: state.has_all({black_orb_destroyed, lute}, player)
     world.get_entrance("Melmond Region -> Cavern of Earth Deep").access_rule = \
         lambda state: state.has(earth_rod, player)
     world.get_entrance("Onrac Region -> Waterfall").access_rule = \
