@@ -43,9 +43,7 @@ class FF1pixelLocation(Location):
 
 class FF1pixelWorld(World):
     """
-    Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action game
-    about a small fox on a big adventure. Stranded on a mysterious beach, armed with only your own curiosity, you will
-    confront colossal beasts, collect strange and powerful items, and unravel long-lost secrets. Be brave, tiny fox!
+    Explore the world of Final Fantasy from its origins.
     """
     game = GAME_NAME
     web = FF1pixelWeb()
@@ -128,6 +126,6 @@ class FF1pixelWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "seed": self.random.randint(0, 2147483647),
+            "shuffle_gear_shops": self.options.shuffle_gear_shops.value
          }
         return slot_data

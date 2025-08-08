@@ -10,24 +10,24 @@ if TYPE_CHECKING:
     from . import FF1pixelWorld
 
 
-class VanillaChestPriority(DefaultOnToggle):
+class ShuffleGearShops(DefaultOnToggle):
     """
-    bla  bla
+    Shuffle the content of all Weapon Shops together, and do the same for Armor Shops.
     """
-    internal_name = "chest_priority"
-    display_name = "Prioritize Vanilla Chests"
+    internal_name = "shuffle_gear_shops"
+    display_name = "Shuffle Gear Shops"
 
 @dataclass
 class FF1pixelOptions(PerGameCommonOptions):
     # generation options
-    chest_priority: VanillaChestPriority
+    shuffle_gear_shops: ShuffleGearShops
 
 grouped_options = [
     OptionGroup("Base Options", [
-        VanillaChestPriority,
+        ShuffleGearShops,
     ])]
 
 presets = {
-    "Vanilla-like": {
-        "chest_priority": True,
+    "Starter": {
+        "shuffle_gear_shops": True,
     }}
