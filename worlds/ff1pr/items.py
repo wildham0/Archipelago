@@ -152,6 +152,7 @@ item_table: Dict[str, FF1pixelItemData] = {
     "Protect Cloak": FF1pixelItemData(IC.useful, 2, 173, 1),
     "Sasuke's Blade": FF1pixelItemData(IC.useful, 2, 100, 1),
     "Masamune": FF1pixelItemData(IC.useful, 1, 103, 1),
+    "Bottled Faerie": FF1pixelItemData(IC.progression, 1, 59, 1),
 }
 
 #{name: location_base_id + index for index, name in enumerate(location_table)}

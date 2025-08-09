@@ -1,6 +1,7 @@
 from typing import Dict, TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
+from .items import item_table
 from BaseClasses import CollectionState
 if TYPE_CHECKING:
     from . import FF1pixelWorld
@@ -34,7 +35,7 @@ earth_crystal = "Earth Crystal"
 fire_crystal = "Fire Crystal"
 water_crystal = "Water Crystal"
 air_crystal = "Air Crystal"
-bottle = "Bottle"
+bottle = "Bottled Faerie"
 black_orb_destroyed = "Black Orb Destroyed"
 chaos_defeated = "Chaos Defeated"
 
@@ -153,7 +154,7 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
     set_rule(world.get_location("Ryukhan Desert - Airship"),
              lambda state: state.has(levistone, player))
     world.get_location("Mount Gulg - Kary").place_locked_item(world.create_event(fire_crystal))
-    world.get_location("Caravan").place_locked_item(world.create_event(bottle))
+    #world.get_location("Caravan").place_locked_item(world.create_event(bottle))
     world.get_location("Onrac - Sub Engineer").place_locked_item(world.create_event(submarine))
     set_rule(world.get_location("Onrac - Sub Engineer"),
              lambda state: state.has(oxyale, player))
@@ -171,6 +172,11 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
 
     # Force ship
     world.get_location("Pravoka - Bikke").place_locked_item(world.create_item(ship))
+
+    # Prevent Gil landing in the Caravan
+    for item_name, item_value in item_table.items():
+        if item_value.item_id_offset == 1:
+            forbid_item(world.get_location("Caravan"), item_name, player)
 
     # Victory Condition
     world.multiworld.completion_condition[world.player] = lambda state: state.has(chaos_defeated, world.player)
