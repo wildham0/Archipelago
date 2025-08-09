@@ -17,17 +17,27 @@ class ShuffleGearShops(DefaultOnToggle):
     internal_name = "shuffle_gear_shops"
     display_name = "Shuffle Gear Shops"
 
+class ShuffleSpells(DefaultOnToggle):
+    """
+    Shuffle Spells amongst their own School.
+    """
+    internal_name = "shuffle_spells"
+    display_name = "Shuffle Spells"
+
 @dataclass
 class FF1pixelOptions(PerGameCommonOptions):
     # generation options
     shuffle_gear_shops: ShuffleGearShops
+    shuffle_spells: ShuffleSpells
 
 grouped_options = [
     OptionGroup("Base Options", [
         ShuffleGearShops,
+        ShuffleSpells,
     ])]
 
 presets = {
     "Starter": {
         "shuffle_gear_shops": True,
+        "shuffle_spells": True,
     }}

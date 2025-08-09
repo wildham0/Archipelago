@@ -126,6 +126,7 @@ class FF1pixelWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
-            "shuffle_gear_shops": self.options.shuffle_gear_shops.value
+            "shuffle_gear_shops": self.options.shuffle_gear_shops.value,
+            "shuffle_spells": self.options.shuffle_spells.value
          }
         return slot_data
