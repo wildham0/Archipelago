@@ -127,6 +127,12 @@ class FF1pixelWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "shuffle_gear_shops": self.options.shuffle_gear_shops.value,
-            "shuffle_spells": self.options.shuffle_spells.value
+            "shuffle_spells": self.options.shuffle_spells.value,
+            "shuffle_trials_maze": self.options.shuffle_trials_maze.value,
+            "dungeon_encounter_rate": self.options.dungeon_encounter_rate.value,
+            "overworld_encounter_rate": self.options.overworld_encounter_rate.value,
+            "xp_boost": self.options.xp_boost.value,
+            "gil_boost": self.options.gil_boost.value,
+            "boost_menu": self.options.boost_menu.value,
          }
         return slot_data
