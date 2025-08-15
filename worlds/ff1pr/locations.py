@@ -174,7 +174,7 @@ location_table: Dict[str, FF1PRLocationData] = {
     "Dragon Caves (Plains) - Duo 1": FF1PRLocationData("Dragon Region", "Treasure", 219),
     "Dragon Caves (Plains) - Duooo 2": FF1PRLocationData("Dragon Region", "Treasure", 220),
     "Dragon Caves - Bahamut": FF1PRLocationData("Dragon Region", "GameObject", 407),
-    "Caravan": FF1PRLocationData("Onrac Region", "GameObject", 406),
+    "Onrac Desert - Caravan": FF1PRLocationData("Onrac Region", "GameObject", 406),
     "Waterfall Caverns - Chest 1": FF1PRLocationData("Waterfall", "Treasure", 114),
     "Waterfall Caverns - Chest 2": FF1PRLocationData("Waterfall", "Treasure", 115),
     "Waterfall Caverns - Chest 3": FF1PRLocationData("Waterfall", "Treasure", 116),
