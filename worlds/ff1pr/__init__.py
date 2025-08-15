@@ -10,15 +10,8 @@ from .options import FF1pixelOptions, grouped_options, presets
 from worlds.AutoWorld import WebWorld, World
 from Options import OptionError, PerGameCommonOptions
 from settings import Group, Bool, FilePath
-from ..stardew_valley.items.item_creation import remove_items
 
 GAME_NAME: str = "FF1 Pixel Remaster"
-
-class FF1pixelSettings(Group):
-    class DisableLocalSpoiler(Bool):
-        """Disallows the TUNIC client from creating a local spoiler log."""
-
-    disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
 
 class FF1pixelWeb(WebWorld):
     tutorials = [
@@ -53,7 +46,6 @@ class FF1pixelWorld(World):
 
     options: FF1pixelOptions
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = FF1pixelOptions
-    settings: ClassVar[FF1pixelSettings]
 
     item_name_groups = items.item_name_groups
     location_name_groups = locations.location_name_groups
