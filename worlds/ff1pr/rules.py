@@ -196,7 +196,7 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
     # Prevent Gil landing in the Caravan
     for item_name, item_value in item_table.items():
         if item_value.item_id_offset == 1:
-            forbid_item(world.get_location("Caravan"), item_name, player)
+            forbid_item(world.get_location("Onrac Desert - Caravan"), item_name, player)
 
     # Victory Condition
     world.multiworld.completion_condition[world.player] = lambda state: state.has(chaos_defeated, world.player)

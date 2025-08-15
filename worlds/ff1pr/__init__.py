@@ -2,8 +2,8 @@ from dataclasses import fields
 from typing import Dict, List, Any, Tuple, Type, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
-from .items import item_name_to_id, item_table
-from .locations import location_table, standard_location_name_to_id, event_table
+from .items import item_name_to_id, item_table, item_name_groups
+from .locations import location_table, standard_location_name_to_id, event_table, location_name_groups
 from .rules import set_location_rules, set_region_rules
 from .regions import ff1pr_regions
 from .options import FF1pixelOptions, grouped_options, presets
@@ -47,8 +47,8 @@ class FF1pixelWorld(World):
     options: FF1pixelOptions
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = FF1pixelOptions
 
-    item_name_groups = items.item_name_groups
-    location_name_groups = locations.location_name_groups
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
 
@@ -79,7 +79,7 @@ class FF1pixelWorld(World):
             ff1pr_items.append(self.create_item("All Promotion Jobs"))
         elif self.options.job_promotion == 2:
             ff1pr_items = self.remove_filler(ff1pr_items, 5)
-            for item in items.item_name_groups["Jobs"]:
+            for item in item_name_groups["Jobs"]:
                 ff1pr_items.append(self.create_item(item))
 
 
