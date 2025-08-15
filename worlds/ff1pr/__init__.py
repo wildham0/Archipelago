@@ -10,6 +10,7 @@ from .options import FF1pixelOptions, grouped_options, presets
 from worlds.AutoWorld import WebWorld, World
 from Options import OptionError, PerGameCommonOptions
 from settings import Group, Bool, FilePath
+from NetUtils import SlotType
 
 GAME_NAME: str = "FF1 Pixel Remaster"
 
@@ -51,6 +52,9 @@ class FF1pixelWorld(World):
     location_name_groups = location_name_groups
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
+
+    def generate_early(self):
+        self.multiworld.player_types[self.player] = SlotType.spectator  # mark as spectator
 
     def create_event(self, event: str) -> FF1pixelItem:
         # while we are at it, we can also add a helper to create events
