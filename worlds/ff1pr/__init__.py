@@ -35,6 +35,7 @@ class FF1pixelWeb(WebWorld):
     game = GAME_NAME
     option_groups = grouped_options
     options_presets = presets
+    bug_report_page = "https://github.com/wildham0/FF1PRAP/issues"
 
 class FF1pixelItem(Item):
     game: str = GAME_NAME
@@ -58,15 +59,6 @@ class FF1pixelWorld(World):
     location_name_groups = locations.location_name_groups
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
-
-
-    def generate_early(self) -> None:
-        try:
-            int(self.settings.disable_local_spoiler)
-        except AttributeError:
-            raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
-                            "This would cause an error at the end of generation.\n"
-                            "Please remove one of them, most likely the one in lib/worlds.")
 
     def create_event(self, event: str) -> FF1pixelItem:
         # while we are at it, we can also add a helper to create events
