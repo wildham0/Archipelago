@@ -10,6 +10,7 @@ from .options import FF1pixelOptions, grouped_options, presets
 from worlds.AutoWorld import WebWorld, World
 from Options import OptionError, PerGameCommonOptions
 from settings import Group, Bool, FilePath
+from ..stardew_valley.items.item_creation import remove_items
 
 GAME_NAME: str = "FF1 Pixel Remaster"
 
@@ -85,6 +86,19 @@ class FF1pixelWorld(World):
                 ff1pr_items.append(self.create_item(item))
             items_made += quantity
 
+        # Early Progression Ship
+        if self.options.early_progression.value == 1:
+            ff1pr_items.append(self.create_item("Ship"))
+
+        # Job Items
+        if self.options.job_promotion == 1:
+            ff1pr_items.append(self.create_item("All Promotion Jobs"))
+        elif self.options.job_promotion == 2:
+            ff1pr_items = self.remove_filler(ff1pr_items, 5)
+            for item in items.item_name_groups["Jobs"]:
+                ff1pr_items.append(self.create_item(item))
+
+
         #location_count = len(location_table) # adding events >_<
         #filler_count = location_count - items_made
 
@@ -115,6 +129,10 @@ class FF1pixelWorld(World):
             location = FF1pixelLocation(self.player, location_name, None, region)
             region.locations.append(location)
 
+        if self.options.job_promotion > 0:
+            region = self.get_region("Dragon Region")
+            location = FF1pixelLocation(self.player, "location_name", None, region)
+
 
     def set_rules(self) -> None:
         set_region_rules(self)
@@ -124,11 +142,19 @@ class FF1pixelWorld(World):
         filler_list = list(self.item_name_groups["Fillers"])
         return self.random.choice(filler_list)
 
+    def remove_filler(self, created_items: List[FF1pixelItem], qty: int) -> List[FF1pixelItem]:
+        for i in range(qty):
+            created_items.remove(self.create_item(self.get_filler_item_name()))
+        return created_items
+
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "shuffle_gear_shops": self.options.shuffle_gear_shops.value,
             "shuffle_spells": self.options.shuffle_spells.value,
+            "job_promotion": self.options.job_promotion.value,
             "shuffle_trials_maze": self.options.shuffle_trials_maze.value,
+            "early_progression": self.options.early_progression.value,
             "dungeon_encounter_rate": self.options.dungeon_encounter_rate.value,
             "overworld_encounter_rate": self.options.overworld_encounter_rate.value,
             "xp_boost": self.options.xp_boost.value,
