@@ -5,7 +5,7 @@ from ..oot.ntype import int32
 class FF1PRLocationData(NamedTuple):
     region: str
     type: str
-    flag: int32
+    flag: int
     # er_region: str  # entrance rando region
 
 location_base_id = 398735498

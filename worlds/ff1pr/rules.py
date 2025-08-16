@@ -144,8 +144,6 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
              lambda state: state.has(vampire_defeated, player))
     set_rule(world.get_location("Crescent Lake - Canoe Sage"),
              lambda state: state.has(earth_crystal, player))
-    set_rule(world.get_location("Dragon Caves - Bahamut"),
-             lambda state: state.has(rattail, player))
     set_rule(world.get_location("Gaia - Fairy"),
              lambda state: state.has(bottle, player))
     set_rule(world.get_location("Lufenia - Lufenian Man"),
@@ -190,8 +188,9 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
     if world.options.early_progression.value == 0:
         world.get_location("Pravoka - Bikke").place_locked_item(world.create_item(ship))
 
-    if world.options.job_promotion.value == 0:
-        world.get_location("Dragon Caves - Bahamut").place_locked_item(world.create_event("Bahamut Promotion"))
+    if world.options.job_promotion.value != 0:
+        set_rule(world.get_location("Dragon Caves - Bahamut"),
+                 lambda state: state.has(rattail, player))
 
     # Prevent Gil landing in the Caravan
     for item_name, item_value in item_table.items():

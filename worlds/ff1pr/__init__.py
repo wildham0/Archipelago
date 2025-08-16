@@ -8,9 +8,7 @@ from .rules import set_location_rules, set_region_rules
 from .regions import ff1pr_regions
 from .options import FF1pixelOptions, grouped_options, presets
 from worlds.AutoWorld import WebWorld, World
-from Options import OptionError, PerGameCommonOptions
-from settings import Group, Bool, FilePath
-from NetUtils import SlotType
+from Options import PerGameCommonOptions
 
 GAME_NAME: str = "FF1 Pixel Remaster"
 
@@ -43,18 +41,14 @@ class FF1pixelWorld(World):
     """
     game = GAME_NAME
     web = FF1pixelWeb()
-    required_client_version = (0, 6, 2)
 
     options: FF1pixelOptions
-    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = FF1pixelOptions
+    options_dataclass = FF1pixelOptions
 
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
-
-    def generate_early(self):
-        self.multiworld.player_types[self.player] = SlotType.spectator  # mark as spectator
 
     def create_event(self, event: str) -> FF1pixelItem:
         # while we are at it, we can also add a helper to create events
@@ -68,23 +62,35 @@ class FF1pixelWorld(World):
         items_made: int = 0
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
+        available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
+                                       item_table[filler].classification == ItemClassification.filler]
+
+        def remove_filler(qty: int) -> None:
+            for i in range(qty):
+                filler_item = self.random.choice(available_filler)
+                #if items_to_create[filler_item] == 0:
+                # screw up message
+                items_to_create[filler_item] -= 1
+                if items_to_create[filler_item] == 0:
+                    available_filler.remove(filler_item)
+
+        # Early Progression Ship
+        if self.options.early_progression.value == 1:
+            items_to_create["Ship"] = 1
+
+        # Job Items
+        if self.options.job_promotion == 1:
+            items_to_create["All Promotion Jobs"] = 1
+        elif self.options.job_promotion == 2:
+            remove_filler(5)
+            for item in item_name_groups["Jobs"]:
+                items_to_create[item] = 1
 
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
                 ff1pr_items.append(self.create_item(item))
             items_made += quantity
 
-        # Early Progression Ship
-        if self.options.early_progression.value == 1:
-            ff1pr_items.append(self.create_item("Ship"))
-
-        # Job Items
-        if self.options.job_promotion == 1:
-            ff1pr_items.append(self.create_item("All Promotion Jobs"))
-        elif self.options.job_promotion == 2:
-            ff1pr_items = self.remove_filler(ff1pr_items, 5)
-            for item in item_name_groups["Jobs"]:
-                ff1pr_items.append(self.create_item(item))
 
 
         #location_count = len(location_table) # adding events >_<
@@ -102,25 +108,25 @@ class FF1pixelWorld(World):
 
         for region_name, exits in ff1pr_regions.items():
             region = self.get_region(region_name)
-            print(region_name)
+            #print(region_name)
             region.add_exits(exits)
 
+
+
         for location_name, location_id in self.location_name_to_id.items():
-            print(location_name)
+            #print(location_name)
             region = self.get_region(location_table[location_name].region)
+            if location_name == "Dragon Caves - Bahamut":
+                if self.options.job_promotion == 0:
+                    continue
             location = FF1pixelLocation(self.player, location_name, location_id, region)
             region.locations.append(location)
 
         for location_name, location_data in event_table.items():
-            print(location_name)
+            #print(location_name)
             region = self.get_region(location_data.region)
             location = FF1pixelLocation(self.player, location_name, None, region)
             region.locations.append(location)
-
-        if self.options.job_promotion > 0:
-            region = self.get_region("Dragon Region")
-            location = FF1pixelLocation(self.player, "location_name", None, region)
-
 
     def set_rules(self) -> None:
         set_region_rules(self)
@@ -129,12 +135,6 @@ class FF1pixelWorld(World):
     def get_filler_item_name(self) -> str:
         filler_list = list(self.item_name_groups["Fillers"])
         return self.random.choice(filler_list)
-
-    def remove_filler(self, created_items: List[FF1pixelItem], qty: int) -> List[FF1pixelItem]:
-        for i in range(qty):
-            created_items.remove(self.create_item(self.get_filler_item_name()))
-        return created_items
-
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
