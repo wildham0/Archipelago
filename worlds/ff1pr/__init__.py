@@ -143,6 +143,7 @@ class FF1pixelWorld(World):
             "job_promotion": self.options.job_promotion.value,
             "shuffle_trials_maze": self.options.shuffle_trials_maze.value,
             "early_progression": self.options.early_progression.value,
+            "nerf_chaos": self.options.nerf_chaos.value,
             "dungeon_encounter_rate": self.options.dungeon_encounter_rate.value,
             "overworld_encounter_rate": self.options.overworld_encounter_rate.value,
             "xp_boost": self.options.xp_boost.value,

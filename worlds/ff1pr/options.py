@@ -65,6 +65,13 @@ class EarlyProgression(Choice):
     option_marsh_cave_path = 1
     default = 0
 
+class NerfChaos(DefaultOnToggle):
+    """
+    Halve Chaos' HP and reduce his Intelligence and Attack Power by 25%.
+    """
+    internal_name = "nerf_chaos"
+    display_name = "Nerf Chaos"
+
 class DungeonEncounterRate(Choice):
     """
     Modify the Encounter Rate in dungeons by the multiplier selected.
@@ -136,6 +143,7 @@ class FF1pixelOptions(PerGameCommonOptions):
     shuffle_gear_shops: ShuffleGearShops
     shuffle_spells: ShuffleSpells
     job_promotion: JobPromotion
+    nerf_chaos: NerfChaos
     dungeon_encounter_rate: DungeonEncounterRate
     overworld_encounter_rate: OverworldEncounterRate
     shuffle_trials_maze: ShuffleTrialsMaze
@@ -156,6 +164,7 @@ grouped_options = [
         EarlyProgression
     ]),
     OptionGroup("Scaling Options", [
+        NerfChaos,
         DungeonEncounterRate,
         OverworldEncounterRate,
         ExperienceBoost,
@@ -171,6 +180,7 @@ presets = {
         "job_promotion": 0,
         "shuffle_trials_maze": True,
         "early_progression": 0,
+        "nerf_chaos": True,
         "dungeon_encounter_rate": 2,
         "overworld_encounter_rate": 2,
         "xp_boost": 3,
