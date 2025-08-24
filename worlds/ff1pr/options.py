@@ -72,6 +72,37 @@ class NerfChaos(DefaultOnToggle):
     internal_name = "nerf_chaos"
     display_name = "Nerf Chaos"
 
+class MonsterParties(Choice):
+    """
+    Randomize Monster Parties.
+    Standard: Original Monster Parties are maintained.
+    No Variance: Monsters will be replaced by Monsters of roughly the same power.
+    Low Variance: Monsters can be replaced by slightly weaker or slightly stronger Monsters.
+    High Variance: Monsters can be replaced by much weaker or much stronger Monsters.
+    """
+    internal_name = "monster_parties"
+    display_name = "Monster Parties"
+    option_standard = 0
+    option_random_no_variance = 1
+    option_random_low_variance = 2
+    option_random_high_variance = 3
+    default = 1
+
+class MonstersCap(Choice):
+    """
+    If Monster Parties are randomized, bound Power Variance.
+    This option doesn't do anything for Standard and No Variance choices.
+    None: Variance is unbounded, Randomized Monster Parties can be weaker or stronger.
+    Upper Bound: Randomized Monsters cannot be more powerful than the replaced Monsters, but they can be weaker.
+    Lower Bound: Randomized Monsters cannot be weaker than the replaced Monsters, but they can be more powerful.
+    """
+    internal_name = "monsters_cap"
+    display_name = "Variance Cap"
+    option_none = 0
+    option_upper_bound = 1
+    option_lower_bound = 2
+    default = 0
+
 class DungeonEncounterRate(Choice):
     """
     Modify the Encounter Rate in dungeons by the multiplier selected.
@@ -144,6 +175,8 @@ class FF1pixelOptions(PerGameCommonOptions):
     shuffle_spells: ShuffleSpells
     job_promotion: JobPromotion
     nerf_chaos: NerfChaos
+    monster_parties: MonsterParties
+    monsters_cap: MonstersCap
     dungeon_encounter_rate: DungeonEncounterRate
     overworld_encounter_rate: OverworldEncounterRate
     shuffle_trials_maze: ShuffleTrialsMaze
@@ -163,8 +196,12 @@ grouped_options = [
         ShuffleTrialsMaze,
         EarlyProgression
     ]),
-    OptionGroup("Scaling Options", [
+    OptionGroup("Monsters Options", [
         NerfChaos,
+        MonsterParties,
+        MonstersCap
+    ]),
+    OptionGroup("Scaling Options", [
         DungeonEncounterRate,
         OverworldEncounterRate,
         ExperienceBoost,
@@ -181,6 +218,8 @@ presets = {
         "shuffle_trials_maze": True,
         "early_progression": 0,
         "nerf_chaos": True,
+        "monster_parties": 1,
+        "monsters_cap": 0,
         "dungeon_encounter_rate": 2,
         "overworld_encounter_rate": 2,
         "xp_boost": 3,
