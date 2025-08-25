@@ -100,7 +100,7 @@ def set_region_rules(world: "FF1pixelWorld") -> None:
     world.get_entrance("Overworld -> Melmond Region").access_rule = \
         lambda state: state.has_all({ship, canal}, player) or state.has(airship, player)
     world.get_entrance("Overworld -> Sage Region").access_rule = \
-        lambda state: state.has_all({ship, canal, titan_fed}, player) or state.has(airship, player)
+        lambda state: state.has_all({ship, canal, titan_fed}, player) or state.has_all({airship, titan_fed}, player)
     world.get_entrance("Overworld -> Dragon Region").access_rule = \
         lambda state: state.has(airship, player)
     world.get_entrance("Overworld -> Onrac Region").access_rule = \
