@@ -50,6 +50,31 @@ class FF1pixelWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
 
+    items_to_ignore: List[int] = []
+
+    spawn_airship = False
+    spawn_ship = False
+
+    def generate_early(self) -> None:
+        if self.options.start_inventory.value.get("Airship", 0) > 0:
+            self.spawn_airship = True
+            self.items_to_ignore.append(507)
+
+        if self.options.start_inventory_from_pool.value.get("Airship", 0) > 0:
+            self.spawn_airship = True
+            self.items_to_ignore.append(507)
+
+        if self.options.start_inventory.value.get("Ship",0) > 0:
+            self.spawn_ship = True
+            self.items_to_ignore.append(44)
+
+        if self.options.start_inventory_from_pool.value.get("Ship",0) > 0:
+            self.spawn_ship = True
+            self.items_to_ignore.append(44)
+
+        if self.options.job_promotion.value == 0:
+            self.items_to_ignore.append(500)
+
     def create_event(self, event: str) -> FF1pixelItem:
         # while we are at it, we can also add a helper to create events
         return FF1pixelItem(event, ItemClassification.progression, None, self.player)
@@ -75,8 +100,10 @@ class FF1pixelWorld(World):
                     available_filler.remove(filler_item)
 
         # Early Progression Ship
-        if self.options.early_progression.value == 1:
+        if self.options.early_progression.value == 1 and not self.spawn_ship:
             items_to_create["Ship"] = 1
+        elif self.spawn_ship:
+            items_to_create[self.get_filler_item_name()] += 1
 
         # Job Items
         if self.options.job_promotion == 1:
@@ -90,8 +117,6 @@ class FF1pixelWorld(World):
             for _ in range(quantity):
                 ff1pr_items.append(self.create_item(item))
             items_made += quantity
-
-
 
         #location_count = len(location_table) # adding events >_<
         #filler_count = location_count - items_made
@@ -111,14 +136,9 @@ class FF1pixelWorld(World):
             #print(region_name)
             region.add_exits(exits)
 
-
-
         for location_name, location_id in self.location_name_to_id.items():
             #print(location_name)
             region = self.get_region(location_table[location_name].region)
-            if location_name == "Dragon Caves - Bahamut":
-                if self.options.job_promotion == 0:
-                    continue
             location = FF1pixelLocation(self.player, location_name, location_id, region)
             region.locations.append(location)
 
@@ -143,7 +163,9 @@ class FF1pixelWorld(World):
             "job_promotion": self.options.job_promotion.value,
             "shuffle_trials_maze": self.options.shuffle_trials_maze.value,
             "early_progression": self.options.early_progression.value,
+            "northern_docks": self.options.northern_docks.value,
             "nerf_chaos": self.options.nerf_chaos.value,
+            "boss_minions": self.options.boss_minions.value,
             "monster_parties": self.options.monster_parties.value,
             "monsters_cap": self.options.monsters_cap.value,
             "dungeon_encounter_rate": self.options.dungeon_encounter_rate.value,
@@ -151,5 +173,9 @@ class FF1pixelWorld(World):
             "xp_boost": self.options.xp_boost.value,
             "gil_boost": self.options.gil_boost.value,
             "boost_menu": self.options.boost_menu.value,
-         }
+            "spawn_airship": self.spawn_airship,
+            "spawn_ship": self.spawn_ship,
+            "items_to_ignore": self.items_to_ignore
+        }
+
         return slot_data

@@ -22,6 +22,7 @@ oxyale = "Oxyale"
 rosetta_stone = "Rosetta Stone"
 adamantite = "Adamantite"
 rattail = "Rat's Tail"
+alljobsitem = "All Promotion Jobs"
 
 ship = "Ship"
 canoe = "Canoe"
@@ -126,6 +127,12 @@ def set_region_rules(world: "FF1pixelWorld") -> None:
     world.get_entrance("Mirage Tower -> Flying Fortress").access_rule = \
         lambda state: state.has(warp_cube, player)
 
+    if world.options.northern_docks.value:
+        world.get_entrance("Overworld -> Onrac Region").access_rule = \
+            lambda state: state.has(airship, player) or state.has_all({ship, canal}, player)
+        world.get_entrance("Overworld -> Mirage Desert").access_rule = \
+            lambda state: state.has(airship, player) or state.has_all({ship, canal}, player)
+
 def set_location_rules(world: "FF1pixelWorld") -> None:
     player = world.player
 
@@ -185,12 +192,14 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
              lambda state: state.has_all({black_orb_destroyed, lute}, player))
 
     # Ship Logic
-    if world.options.early_progression.value == 0:
+    if world.options.early_progression.value == 0 and not world.spawn_ship:
         world.get_location("Pravoka - Bikke").place_locked_item(world.create_item(ship))
 
-    if world.options.job_promotion.value != 0:
-        set_rule(world.get_location("Dragon Caves - Bahamut"),
-                 lambda state: state.has(rattail, player))
+    # Bahamut
+    set_rule(world.get_location("Dragon Caves - Bahamut"),
+        lambda state: state.has(rattail, player))
+    if world.options.job_promotion.value == 0:
+        world.get_location("Dragon Caves - Bahamut").place_locked_item(world.create_item(alljobsitem))
 
     # Prevent Gil landing in the Caravan
     for item_name, item_value in item_table.items():
