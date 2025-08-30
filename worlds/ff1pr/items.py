@@ -161,6 +161,7 @@ item_table: Dict[str, FF1pixelItemData] = {
     "White Wizard Job": FF1pixelItemData(IC.useful, 0, 505, 1),
     "Black Wizard Job": FF1pixelItemData(IC.useful, 0, 506, 1),
     "Airship": FF1pixelItemData(IC.progression, 0, 507, 1),
+    "Lute Tablature": FF1pixelItemData(IC.progression, 0, 508, 1),
 }
 
 #{name: location_base_id + index for index, name in enumerate(location_table)}

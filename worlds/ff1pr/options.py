@@ -43,6 +43,36 @@ class JobPromotion(Choice):
     option_job_item = 2
     default = 0
 
+class LuteTablatures(NamedRange):
+    """
+    Playing the Lute requires a fixed number of Tablatures; 40 are shuffled in the Item Pool.
+    This sets the number required to play the Lute and open the path in the Temple of Fiends.
+    Set to 0 to disable this feature.
+    If the required number is higher than 0, the Lute is in your starting inventory.
+    """
+    internal_name = "lute_tablatures"
+    display_name = "Lute Tablatures"
+    range_start = 0
+    range_end = 40
+    default = 0
+    special_range_names = {
+        "disable": 0,
+        "low_count": 16,
+        "mid_count": 24,
+        "high_count": 32,
+    }
+
+class CrystalsRequired(Range):
+    """
+    Set the number of Crystals that must be restored so the Dark Orb can be destroyed.
+    """
+    internal_name = "crystals_required"
+    display_name = "Crystals Required"
+    range_start = 0
+    range_end = 4
+    default = 4
+
+
 class ShuffleTrialsMaze(DefaultOnToggle):
     """
     Shuffle the Pillars Maze on floor 2F of the Citadel of Trials.
@@ -200,6 +230,8 @@ class FF1pixelOptions(PerGameCommonOptions):
     shuffle_gear_shops: ShuffleGearShops
     shuffle_spells: ShuffleSpells
     job_promotion: JobPromotion
+    lute_tablatures: LuteTablatures
+    crystals_required: CrystalsRequired
     nerf_chaos: NerfChaos
     boss_minions: BossMinions
     monster_parties: MonsterParties
@@ -219,6 +251,10 @@ grouped_options = [
         ShuffleGearShops,
         ShuffleSpells,
         JobPromotion
+    ]),
+    OptionGroup("End Options", [
+        LuteTablatures,
+        CrystalsRequired
     ]),
     OptionGroup("Map Options", [
         ShuffleTrialsMaze,
@@ -245,6 +281,8 @@ presets = {
         "shuffle_gear_shops": True,
         "shuffle_spells": True,
         "job_promotion": 0,
+        "lute_tablatures": 0,
+        "crystals_required": 4,
         "shuffle_trials_maze": True,
         "early_progression": 0,
         "northern_docks": False,

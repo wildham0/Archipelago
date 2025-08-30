@@ -75,6 +75,9 @@ class FF1pixelWorld(World):
         if self.options.job_promotion.value == 0:
             self.items_to_ignore.append(500)
 
+        if self.options.lute_tablatures.value > 0:
+            self.options.start_inventory.value["Lute"] = 1
+
     def create_event(self, event: str) -> FF1pixelItem:
         # while we are at it, we can also add a helper to create events
         return FF1pixelItem(event, ItemClassification.progression, None, self.player)
@@ -113,16 +116,16 @@ class FF1pixelWorld(World):
             for item in item_name_groups["Jobs"]:
                 items_to_create[item] = 1
 
+        # Lute Tablatures Mode
+        if self.options.lute_tablatures > 0:
+            items_to_create["Lute"] = 0
+            items_to_create["Lute Tablature"] = 40
+            remove_filler(39)
+
         for item, quantity in items_to_create.items():
             for _ in range(quantity):
                 ff1pr_items.append(self.create_item(item))
             items_made += quantity
-
-        #location_count = len(location_table) # adding events >_<
-        #filler_count = location_count - items_made
-
-        #for i in range(filler_count):
-        #    ff1pr_items.append(self.create_item(self.get_filler_item_name()))
 
         self.multiworld.itempool += ff1pr_items
 
@@ -157,10 +160,20 @@ class FF1pixelWorld(World):
         return self.random.choice(filler_list)
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        options_list = options.presets["Starter"].keys()
         slot_data: Dict[str, Any] = {
+            "items_to_ignore": self.items_to_ignore,
+            "spawn_airship": self.spawn_airship,
+            "spawn_ship": self.spawn_ship,
+            **self.options.as_dict(*options_list)
+        }
+
+        dummy_slot_data: Dict[str, Any] = {
             "shuffle_gear_shops": self.options.shuffle_gear_shops.value,
             "shuffle_spells": self.options.shuffle_spells.value,
             "job_promotion": self.options.job_promotion.value,
+            "lute_tablatures": self.options.lute_tablatures.value,
+            "crystals_required": self.options.crystals_required.value,
             "shuffle_trials_maze": self.options.shuffle_trials_maze.value,
             "early_progression": self.options.early_progression.value,
             "northern_docks": self.options.northern_docks.value,

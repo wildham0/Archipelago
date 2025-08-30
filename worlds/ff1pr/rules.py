@@ -2,10 +2,10 @@ from typing import Dict, TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from .items import item_table
+from .options import FF1pixelOptions
 from BaseClasses import CollectionState
 if TYPE_CHECKING:
-    from . import FF1pixelWorld
-
+    from . import FF1pixelWorld, FF1pixelOptions
 
 lute = "Lute"
 crown = "Crown"
@@ -23,6 +23,7 @@ rosetta_stone = "Rosetta Stone"
 adamantite = "Adamantite"
 rattail = "Rat's Tail"
 alljobsitem = "All Promotion Jobs"
+tablature = "Lute Tablature"
 
 ship = "Ship"
 canoe = "Canoe"
@@ -71,6 +72,13 @@ mystic_key_locked_Locations = [
     "Mount Duergar - Treasury 8",
 ]
 
+def has_tablatures(state: CollectionState, options: FF1pixelOptions, player: int) -> bool:
+    return state.has(tablature, player, options.lute_tablatures.value)
+
+def has_crystals(state: CollectionState, options: FF1pixelOptions, player: int) -> bool:
+    return (state.has(earth_crystal, player) + state.has(fire_crystal, player) +
+        state.has(water_crystal, player) + state.has(air_crystal, player)) >= options.crystals_required
+
 def set_region_rules(world: "FF1pixelWorld") -> None:
     player = world.player
     options = world.options
@@ -115,7 +123,8 @@ def set_region_rules(world: "FF1pixelWorld") -> None:
     world.get_entrance("Overworld -> Lufenia Region").access_rule = \
         lambda state: state.has(airship, player)
     world.get_entrance("Overworld -> Beyond the Black Orb").access_rule = \
-        lambda state: state.has_all({black_orb_destroyed, lute}, player)
+        lambda state: (state.has_all({black_orb_destroyed, lute}, player) and
+                       has_tablatures(state, options, player))
     world.get_entrance("Melmond Region -> Cavern of Earth Deep").access_rule = \
         lambda state: state.has(earth_rod, player)
     world.get_entrance("Onrac Region -> Waterfall").access_rule = \
@@ -186,7 +195,7 @@ def set_location_rules(world: "FF1pixelWorld") -> None:
     world.get_location("Flying Fortress - Tiamat").place_locked_item(world.create_event(air_crystal))
     world.get_location("Chaos Shrine - Black Orb").place_locked_item(world.create_event(black_orb_destroyed))
     set_rule(world.get_location("Chaos Shrine - Black Orb"),
-             lambda state: state.has_all({earth_crystal,fire_crystal,water_crystal,air_crystal}, player))
+             lambda state: has_crystals(state, world.options, player))
     world.get_location("Chaos Shrine - Chaos").place_locked_item(world.create_event(chaos_defeated))
     set_rule(world.get_location("Chaos Shrine - Chaos"),
              lambda state: state.has_all({black_orb_destroyed, lute}, player))
