@@ -82,6 +82,8 @@ class ShuffleTrialsMaze(DefaultOnToggle):
 class ShuffleOverworld(Toggle):
     """
     Shuffle all Overworld entrances, except the Towns.
+
+    NOTE: The Princess won't teleport you to Cornelia Castle when this is enabled.
     """
     internal_name = "shuffle_overworld"
     display_name = "Shuffle Overworld"
