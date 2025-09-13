@@ -45,7 +45,6 @@ def generate_entrances_spoiler(world: "FF1pixelWorld") -> str:
 
     entrances_spoiler: str = ""
     for ow_region in overworld_regions:
-
         false_depth = [False for i in range(0, 20)]
         entrances_spoiler += visit_region(ow_region, 0, false_depth)
 
